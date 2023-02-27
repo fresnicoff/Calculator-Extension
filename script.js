@@ -1,15 +1,14 @@
 //3√-2
-//-3√-2
-//43^20 (el 0 no aparece) tambien con todas las operaciones.
+//--3 = 3
 //"homepage_url" to manifest.
-//0.002
 let calculation = [];
-let current_number = 0;
+let current_number = null;
 let decimals = 0;
 const DECIMAL_PRECISION = 6;
 const PI = 3.14159265;
 
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('zero').onclick = function() {updateNumber(0);};
     document.getElementById('one').onclick = function() {updateNumber(1);};
     document.getElementById('two').onclick = function() {updateNumber(2);};
     document.getElementById('three').onclick = function() {updateNumber(3);};
@@ -50,7 +49,7 @@ document.onkeydown = function(e) {
 }
 
 function updateNumber(value) {
-    if (current_number == 0 && !isNaN(calculation[calculation.length - 1]) && calculation[calculation.length - 2] != "√") {
+    if (current_number == null && !isNaN(calculation[calculation.length - 1]) && calculation[calculation.length - 2] != "√") {
         calculation.push("x");
     }
 
@@ -68,12 +67,12 @@ function updateNumber(value) {
 }
 
 function addOperator(operator) {
-    if (calculation.length == 0 && current_number == 0 && operator != "-") return;
-    if (isNaN(calculation[calculation.length - 1]) && current_number == 0 && operator != "-") {
+    if (calculation.length == 0 && current_number == null && operator != "-") return;
+    if (isNaN(calculation[calculation.length - 1]) && current_number == null && operator != "-") {
         calculation.pop();
         calculation.push(operator);
     } else if (operator == "√") {
-        if (current_number != 0) {
+        if (current_number != null) {
             /*
             if (calculation[calculation.length - 1] == "-") {
                 calculation.splice(calculation.length - 1, 0, "√");
@@ -189,6 +188,7 @@ function reloadDisplay() {
         document.getElementById("display").style.setProperty("font-size", `30px`);
     } else {
         let result = Math.round(calculation[0] * Math.pow(10, DECIMAL_PRECISION)) / Math.pow(10, DECIMAL_PRECISION);
+        calculation[0] = result;
         let size = result.toString().length;
         if (size >= 12) {
             size = 51 - 2 * size;
@@ -205,32 +205,32 @@ function reloadDisplay() {
 }
 
 function clearCurrentNumber() {
-    if (current_number != 0 && calculation[calculation.length - 2] == "√") {
+    if (current_number != null && calculation[calculation.length - 2] == "√") {
         calculation.splice(calculation.length - 2, 0, current_number);
-    } else if (current_number != 0) {
+    } else if (current_number != null) {
         calculation.push(current_number);
     }
-    current_number = 0;
+    current_number = null;
     decimals = 0;
 }
 
 function clearCalc() {
     calculation = [];
-    current_number = 0;
+    current_number = null;
     decimals = 0;
     reloadTemp();
     document.getElementById("display").innerHTML = "";
 }
 
 function reloadTemp() { 
-    if (current_number != 0 && calculation[calculation.length - 2] == "√") {
+    if (current_number != null && calculation[calculation.length - 2] == "√") {
         let temp = [].concat(calculation);
         temp.splice(calculation.length - 2, 0, current_number);
         let result = temp.join(" ");
         document.getElementById("temp").innerHTML = result;
     } else {
         let result = calculation.join(" ");
-        if (current_number != 0) {
+        if (current_number != null) {
             result += " " + current_number;
         }
         document.getElementById("temp").innerHTML = result;
