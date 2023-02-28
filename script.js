@@ -1,12 +1,10 @@
-//3√-2
-//--3 = 3
-//"homepage_url" to manifest.
 let calculation = [];
 let current_number = null;
 let decimals = 0;
 const DECIMAL_PRECISION = 6;
 const PI = 3.14159265;
 
+//Allow mouse input when clicking the HTML buttons.
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('zero').onclick = function() {updateNumber(0);};
     document.getElementById('one').onclick = function() {updateNumber(1);};
@@ -30,8 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('PI').onclick = function() {addPI();};
     document.getElementById('decimal').onclick = function() {updateNumber(".");};
     document.getElementById('equals').onclick = function() {calculate();};
-}, false)
+});
 
+//Allow keyboard input.
 document.onkeydown = function(e) {
     if (e.key == "Backspace") {
         clearCalc();
@@ -48,7 +47,9 @@ document.onkeydown = function(e) {
     }
 }
 
+//Change the current number value given the user input.
 function updateNumber(value) {
+    //Multiply if two different numbers are consecutive to each other.
     if (current_number == null && !isNaN(calculation[calculation.length - 1]) && calculation[calculation.length - 2] != "√") {
         calculation.push("x");
     }
@@ -66,23 +67,22 @@ function updateNumber(value) {
     reloadTemp();
 }
 
+//Add the operator to calculation[] and the current number.
 function addOperator(operator) {
+    //Don't allow first input to be an operator except "-".
     if (calculation.length == 0 && current_number == null && operator != "-") return;
+    //Don't allow "--".
+    if (operator == "-" && calculation[calculation.length - 1] == "-") return;
+    //If the user types two consecutive operators, the last typed rules.
     if (isNaN(calculation[calculation.length - 1]) && current_number == null && operator != "-") {
         calculation.pop();
         calculation.push(operator);
-    } else if (operator == "√") {
+        return;
+    }
+    
+    //For the sake of clarity, 2√9 will appear in calculation[] as [2, "√", 9] (inverse order as it should be typed).
+    if (operator == "√") {
         if (current_number != null) {
-            /*
-            if (calculation[calculation.length - 1] == "-") {
-                calculation.splice(calculation.length - 1, 0, "√");
-                calculation.push(current_number);
-                current_number = 0;
-                decimals = 0;
-                reloadTemp();
-                return;
-            }
-            */
             calculation.push(operator);
             clearCurrentNumber();
         } else {
@@ -98,6 +98,7 @@ function addOperator(operator) {
     reloadTemp();
 }
 
+//Add PI to the calculation[].
 function addPI() {
     clearCurrentNumber();
     if (calculation[calculation.length - 2] == "√") {
@@ -111,17 +112,20 @@ function addPI() {
     reloadTemp();
 }
 
+//Calculates the result of calculation[] and saves the result on calculation[0].
 function calculate() {
     clearCurrentNumber();
     calculation.push("=");
     reloadTemp();
     calculation.pop();
 
+    //If the user typed nothing, return.
     if (calculation.length == 0) {
         reloadDisplay();
         return;
     }
 
+    //Convert ["-", 5] in [-5].
     for (i = 0; i < calculation.length; i++) {
         if (calculation[i] == '-' && typeof(calculation[i - 1]) != "number") {
             calculation[i + 1] *= -1;
@@ -170,11 +174,13 @@ function calculate() {
     reloadDisplay();
 }
 
+//Splice the calculation[] when two numbers are calculated.
 function spliceCalculation(i) {
     calculation.splice(i - 1, 1);
     calculation.splice(i, 1);
 }
 
+//Check if the calculation is over to improve performance.
 function checkIfOver() {
     if (calculation.length == 1) {
         reloadDisplay();
@@ -182,28 +188,7 @@ function checkIfOver() {
     }
 }
 
-function reloadDisplay() {
-    if (isNaN(calculation[0]) || calculation.length > 1) {
-        document.getElementById("display").innerHTML = "Error";
-        document.getElementById("display").style.setProperty("font-size", `30px`);
-    } else {
-        let result = Math.round(calculation[0] * Math.pow(10, DECIMAL_PRECISION)) / Math.pow(10, DECIMAL_PRECISION);
-        calculation[0] = result;
-        let size = result.toString().length;
-        if (size >= 12) {
-            size = 51 - 2 * size;
-            if (size < 14) {
-                size = 14;
-            }
-            size += "px";
-        } else {
-            size = "30px";
-        }
-        document.getElementById("display").innerHTML = result;
-        document.getElementById("display").style.setProperty("font-size", size);
-    }
-}
-
+//Add the current number the user typed to calculation[] and set the variables to default.
 function clearCurrentNumber() {
     if (current_number != null && calculation[calculation.length - 2] == "√") {
         calculation.splice(calculation.length - 2, 0, current_number);
@@ -214,6 +199,7 @@ function clearCurrentNumber() {
     decimals = 0;
 }
 
+//Set all the variables and HTML elements to their default state.
 function clearCalc() {
     calculation = [];
     current_number = null;
@@ -222,6 +208,7 @@ function clearCalc() {
     document.getElementById("display").innerHTML = "";
 }
 
+//Changes the HTML temp to be the temporary state of the calculation[].
 function reloadTemp() { 
     if (current_number != null && calculation[calculation.length - 2] == "√") {
         let temp = [].concat(calculation);
@@ -234,5 +221,29 @@ function reloadTemp() {
             result += " " + current_number;
         }
         document.getElementById("temp").innerHTML = result;
+    }
+}
+
+//Changes the HTML display to be the result of the calculation.
+function reloadDisplay() {
+    if (isNaN(calculation[0]) || calculation.length > 1) {
+        document.getElementById("display").innerHTML = "Error";
+        document.getElementById("display").style.setProperty("font-size", `30px`);
+    } else {
+        let result = Math.round(calculation[0] * Math.pow(10, DECIMAL_PRECISION)) / Math.pow(10, DECIMAL_PRECISION);
+        calculation[0] = result;
+        //Changes the CSS font-size property of the display based on the length of the result.
+        let size = result.toString().length;
+        if (size >= 12) {
+            size = 51 - 2 * size;
+            if (size < 14) {
+                size = 14;
+            }
+            size += "px";
+        } else {
+            size = "30px";
+        }
+        document.getElementById("display").innerHTML = result;
+        document.getElementById("display").style.setProperty("font-size", size);
     }
 }
