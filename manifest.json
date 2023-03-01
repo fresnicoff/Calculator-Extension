@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Perform simple mathematical operations",
     "author": "Facundo Resnicoff",
-    "homepage_url": "https://github.com/fresnicoff/JavaScript-Calculator",
+    "homepage_url": "https://github.com/fresnicoff/Calculator-Extension",
     "icons":{
         "48": "icon.png"
     },
