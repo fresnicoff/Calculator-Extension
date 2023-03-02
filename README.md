@@ -23,6 +23,7 @@ I often found myself doing math homework on my computer but always searching "Ca
 As my Internet connection is not always fast, I lost a lot of valuable time waiting until my browser's default calculator was fully loaded.
 In consequence, after finishing CS50x, I thought that a good idea for my final project would be creating a Chrome extension that can solve basic mathematical calculations in a fast and elegant way.
 
+
 ## 📝 Description
 `index` is an HTML file that configures the GUI. It is divided in:
 - `Container-Input`: Handles the buttons the user can interact with.
