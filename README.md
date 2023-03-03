@@ -2,7 +2,7 @@
 Easy-to-use calculator displayed in a Chrome extension.
 
 
-## 🎥 Video Demo:
+## 🎥 Video Demo: https://drive.google.com/file/d/1EtQq_rD4hYJ_iZVw75_FMUpmJ-Ru4_Yy/view?usp=share_link
 
 
 ## 📦 Installation
