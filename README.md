@@ -59,8 +59,4 @@ It also contains a description, author information, the current version, and a l
 Feel free to add pull requests.
 
 
-<<<<<<< HEAD
 ## 🧾 License: [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0)
-=======
-## 🧾 License: [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0)
->>>>>>> 146b483510f3486a4c3e7a9167c7ce7f8aabf35c
